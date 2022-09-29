@@ -1,7 +1,7 @@
 import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -9,28 +9,28 @@ import Paper from "@mui/material/Paper";
 import { IconButton, TextField } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import { styled } from '@mui/material/styles';
 import moment from "moment";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
+
 
 export default function BasicTable({ list, setList }) {
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("completed");
 
-  const handleRequestSort = (property) => {
-    console.log('1');
-    setOrder("asc");
-    setOrderBy(property);
-  };
+  // const [order, setOrder] = React.useState("asc");
+  // const [orderBy, setOrderBy] = React.useState("completed");
+
+  // const handleRequestSort = (property) => {
+  //   console.log('1');
+  //   setOrder("asc");
+  //   setOrderBy(property);
+  // };
 
   const handleComplete = (index) => {
     const prevState = [...list];
     prevState[index].completed = true;
     prevState[index].updatedOn = moment().format("DD-MM-YYYY, h:mm:ss a");
     setList(prevState);
-    handleRequestSort("completed");
+    // handleRequestSort("completed");
   };
 
   const deletetask = (index) => {
@@ -39,81 +39,177 @@ export default function BasicTable({ list, setList }) {
     setList(newLists);
   };
 
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+
+  const filter = true;
+  const isCompleted = (x) => x.completed === filter;
+
+  const filterr = false;
+  const Pending = (x) => x.completed ===filterr;
+
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Task Name</TableCell>
-            <TableCell align="left">Time Taken</TableCell>
-            <TableCell
-              align="right"
-              sortDirection={"desc"}
-              onClick={() => handleRequestSort("completed")}
-            >
-              Completed
-            </TableCell>
-            <TableCell align="right">Updated On</TableCell>
-            <TableCell align="right">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {list.map((row, indx) => (
-            <TableRow
-              key={row.name}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
+    <div>
+
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Task Name</TableCell>
+              <TableCell align="left">Time Taken</TableCell>
+              <TableCell
+                align="right"
+                sortDirection={"desc"}
+                // onClick={() => handleRequestSort("completed")}
+              >
+                Completed
               </TableCell>
-              <TableCell align="left">
-                {" "}
-                {row.updatedOn ? (
-                  <div>{row.timeTaken}</div>
-                ) : (
-                  <TextField
-                    id="outlined-basic"
-                    label="Time Taken"
-                    variant="outlined"
-                    placeholder="00:00"
-                    onChange={(event) => {
-                      const prevState = [...list];
-                      prevState[indx].timeTaken = event.target.value;
-                      setList(prevState);
-                    }}
-                    value={row.timeTaken === 0 ? "00:00" : row.timeTaken}
-                    margin="none"
-                  />
-                )}
-              </TableCell>
-              <TableCell align="right">
-                {row.completed ? "True" : "False"}
-              </TableCell>
-              <TableCell align="right">{row.updatedOn}</TableCell>
-              <TableCell align="right">
-                {!row.completed && (
+              {/* <TableCell align="right">Updated On</TableCell> */}
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+          {list.filter(Pending).map((row, indx) => (
+              <TableRow
+                key={row.name}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="left">
+                  {" "}
+                  {row.updatedOn ? (
+                    <div>{row.timeTaken}</div>
+                  ) : (
+                    <TextField
+                      id="outlined-basic"
+                      label="Time Taken"
+                      variant="outlined"
+                      placeholder="00:00"
+                      onChange={(event) => {
+                        const prevState = [...list];
+                        prevState[indx].timeTaken = event.target.value;
+                        setList(prevState);
+                      }}
+                      value={row.timeTaken === 0 ? "00:00" : row.timeTaken}
+                      margin="none"
+                    />
+                  )}
+                </TableCell>
+                <TableCell align="right">
+                  {row.completed ? "True" : "False"}
+                </TableCell>
+                {/* <TableCell align="right">{row.updatedOn}</TableCell> */}
+                <TableCell align="right">
+                  {!row.completed && (
+                    <IconButton
+                      edge="end"
+                      aria-label="complete"
+                      style={{ margin: "15px 10px" }}
+                      onClick={() => handleComplete(indx)}
+                    >
+                      <TaskAltIcon />
+                    </IconButton>
+                  )}
                   <IconButton
                     edge="end"
-                    aria-label="complete"
+                    aria-label="delete"
                     style={{ margin: "15px 10px" }}
-                    onClick={() => handleComplete(indx)}
+                    onClick={() => deletetask(row.indx)}
                   >
-                    <TaskAltIcon />
+                    <DeleteIcon />
                   </IconButton>
-                )}
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  style={{ margin: "15px 10px" }}
-                  onClick={() => deletetask(row.indx)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <h1>Completed Tasks</h1>
+
+
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Task Name</StyledTableCell>
+              <StyledTableCell align="right">Time Taken</StyledTableCell>
+              <StyledTableCell align="right">Completed</StyledTableCell>
+              <StyledTableCell align="right">Updated On</StyledTableCell>
+              <StyledTableCell align="right">Actions</StyledTableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {list.filter(isCompleted).map((row) => (
+              <StyledTableRow key={row.name}>
+                <StyledTableCell component="th" scope="row">
+                  {row.name}
+                </StyledTableCell>
+                <StyledTableCell align="right">{row.timeTaken}</StyledTableCell>
+                {/* <TableCell align="right">
+                  {" "}
+                  {row.updatedOn ? (
+                    <div>{row.timeTaken}</div>
+                  ) : (
+                    <TextField
+                      id="outlined-basic"
+                      label="Time Taken"
+                      variant="outlined"
+                      placeholder="00:00"
+                      onChange={(event) => {
+                        const prevState = [...list];
+                        prevState[indx].timeTaken = event.target.value;
+                        setList(prevState);
+                      }}
+                      value={row.timeTaken === 0 ? "00:00" : row.timeTaken}
+                      margin="none"
+                    />
+                  )}
+                </TableCell> */}
+                 <StyledTableCell align="right">{row.completed ? "True" : "False"}</StyledTableCell>
+                
+                <StyledTableCell align="right">{row.updatedOn}</StyledTableCell>
+                <StyledTableCell align="right">
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    style={{ margin: "15px 10px" }}
+                    onClick={() => deletetask(row.indx)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+
+
+          </TableBody>
+        </Table>
+
+      </TableContainer>
+
+
+    </div>
+
   );
 }

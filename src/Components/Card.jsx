@@ -57,13 +57,14 @@ export default function BasicCard() {
         id="Task"
         onChange={(e) => handleChange(e)}
         placeholder="Add task here..."
+        
       />
       <Button variant="contained"onClick={AddTask}>Add</Button>
 
 
       <Card sx={{ minWidth: 600 }}>
         <CardContent>
-          <Typography sx={{ fontSize: 25 }} color="text.secondary" gutterBottom>
+          <Typography sx={{ fontSize: 25 }} gutterBottom>
             Tasks of the Day
           </Typography>
           <BasicTable
