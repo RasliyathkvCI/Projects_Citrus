@@ -5,6 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import BasicTable from "./Table";
+import Timer from "./Timer";
 
 export default function BasicCard() {
 
@@ -28,6 +29,11 @@ export default function BasicCard() {
 
     }
   ]);
+
+  // const handleChange = (e) => {
+  //   const prevState = [...list];
+  //   prevState[indx].timeTaken = event.target.value;
+  //   setList(prevState);
 
   const handleChange = (e) => {
     setTask(e.target.value);
@@ -60,6 +66,8 @@ export default function BasicCard() {
         
       />
       <Button variant="contained"onClick={AddTask}>Add</Button>
+
+      <Timer/>
 
 
       <Card sx={{ minWidth: 600 }}>
