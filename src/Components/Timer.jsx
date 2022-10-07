@@ -1,33 +1,35 @@
 import * as React from "react";
+import "./Timer.css"
 import { useState } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
+import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import PauseOutlinedIcon from '@mui/icons-material/PauseOutlined';
+import StopIcon from '@mui/icons-material/Stop';
 
 
 export default function Timer({ gettimeValue }) {
 
-    const [time, setTime] = useState({ ms: 0, s: 0, m: 0, h: 0 });
+    const [time, setTime] = useState({s: 0, m: 0, h: 0 });
     const [inter, setInter] = useState();
     const [status, setStatus] = useState(0);
 
+    let newh,newm,news;
+    const { s, m, h } = time;
 
-    const { ms, s, m, h } = time;
 
-
-    var updatedMs = time.ms, updatedS = time.s, updatedM = time.m, updateH = time.h;
+    var updatedS = time.s, updatedM = time.m, updateH = time.h;
 
     const start = () => {
         run();
-        setInter(setInterval(run, 10));
+        setInter(setInterval(run, 1000));
         setStatus(1);
 
     }
 
-
     const run = () => {
-
         if (updatedM === 60) {
             updateH++;
             updatedM = 0;
@@ -37,57 +39,66 @@ export default function Timer({ gettimeValue }) {
             updatedM++;
 
         }
-        if (updatedMs === 100) {
-            updatedS++;
-            updatedMs = 0;
-        }
-        updatedMs++
+        updatedS++
+        
 
-        return setTime({ ms: updatedMs, s: updatedS, m: updatedM, h: updateH });
+        return setTime({s: updatedS, m: updatedM, h: updateH });
     }
-
 
     const stop = () => {
         clearInterval(inter);
-        setStatus(0);
+        setStatus(2);
         const isthroughTimer = true;
         const timerStatus = {
-            ms: updatedMs,
             s: updatedS,
             m: updatedM,
             h: updateH
 
         };
         setTime(timerStatus);
-        const timertime = (time.h + ":" + time.m + ":" + time.s + ":" + time.ms)
-        gettimeValue(timertime, isthroughTimer);
-        setTime({ ms: 0, s: 0, m: 0, h: 0 });
+        if(h >= 10 ){
+             newh = h ;
+        }
+        else {
+            newh = "0" + h
+        }
+        if(m >= 10 ){
+             newm = m ;
+        }
+        else {
+            newm = "0" + m
+        }
+        if(s >= 10 ){
+             news = s ;
+        }
+        else {
+            news = "0" + s
+        }
 
+        const timertime = (newh + ":" + newm + ":" + news );
+        gettimeValue(timertime, isthroughTimer);
     }
 
-
-    // const reset = () => {
-    //     clearInterval(inter);
-    //     setTime({ ms: 0, s: 0, m: 0, h: 0 });
-    //     setStatus(0);
-
-    // }
-
+    const reset =() =>{
+        clearInterval(inter);
+        setTime({s : 0 , m : 0, h : 0 })
+        setStatus(0);
+    }
 
     return (
 
-        <div>
-            <h3 >Timer</h3>
-            <Card sx={{ minWidth: 600 }}>
+        <div className="card_container">
+            
+            <Card  className="timercard">
+            <h2 className="timer_head">Timer</h2>
                 <CardContent>
                     <div>
-
                         <span className="span">
 
                             {h >= 10 ? h : "0" + h}
                         </span>
                         :
-                        <span className="span">
+                        <span className="span" >
 
                             {m >= 10 ? m : "0" + m}
 
@@ -98,46 +109,33 @@ export default function Timer({ gettimeValue }) {
                             {s >= 10 ? s : "0" + s}
 
                         </span>
-                        :
-                        <span className="span">
-
-                            {ms >= 10 ? ms : "0" + ms}
-
-                        </span>
-
+                        
                     </div>
+
                     <br />
 
                     <div>
-                        {/* {status === 0 && <button class="btn_start" onClick={start}>start</button>} */}
-                        {status === 0 && <Button variant="contained" color="success" onClick={start}>START</Button>}
+                        {status === 0 && status !== 2 &&
+                            <div>
+                                 <PlayCircleOutlineIcon variant="contained" color="success"sx={{ fontSize: 50 }} onClick={start}></PlayCircleOutlineIcon>
+                            </div>
+                        }
                         {status === 1 &&
                             <div>
-                                {/* <Button variant="contained" color="secondary" onClick={reset}>RESET</Button> */}
-
-                                <Button variant="contained"
-                                    color="error"
-                                    onClick={stop}
-                                >PAUSE AND ADD</Button>
-
+                                <StopIcon variant="contained" color="error"sx={{ fontSize: 50 }} onClick={reset}></StopIcon>
+                                <PauseOutlinedIcon variant="contained"color="secondary"sx={{ fontSize: 50 }}onClick={stop}></PauseOutlinedIcon>
                             </div>
-
-
                         }
-
-
+                        {status === 2 &&
+                          <div>
+                             <StopIcon variant="contained" color="error" sx={{ fontSize: 50 }}onClick={reset}></StopIcon>
+                             <RestartAltOutlinedIcon variant="contained" color="success" sx={{ fontSize: 50 }}onClick={start}></RestartAltOutlinedIcon>     
+                          </div>
+                        }
                     </div>
-
-
                 </CardContent>
                 <CardActions></CardActions>
             </Card>
-
-
-
-
-
         </div>
-
     )
 }

@@ -1,87 +1,70 @@
 import * as React from "react";
-// import { useEffect } from "react";
+import "./Timer.css"
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import BasicTable from "./Table";
 import Timer from "./Timer";
 import moment from "moment";
+import Popup from "./popup";
+
 
 
 
 export default function BasicCard() {
 
   const [task, setTask] = React.useState("");
-  // const [timertime, setTimertime] = React.useState("");
-  // const [isthrouhtimer, setIsthroughtimer] = React.useState();
-  const [timeflag, setTimeflag] = React.useState(false);
-  // let v1;
-  // let v2;
+  const [timertime, setTimertime] = React.useState("");
+  const [isthrouhtimer, setIsthroughtimer] = React.useState();
   const [list, setList] = React.useState([
     {
-      id: 1,
+      id: 0,
       name: "Task 1",
       completed: false,
       timetaken: 0,
       deletedstatus: false,
       updatedon: "",
-      isthroughTimer: false,
+
 
     },
-
     {
-      id: 2,
+      id: 1,
       name: "Task 2",
       completed: false,
       timetaken: 0,
       deletedstatus: false,
       updatedon: "",
-      isthroughTimer: false,
+
     }
   ]);
-
-  // useEffect(() => {
-  //   setTimertime(timertime);
-  //   setIsthroughtimer(isthrouhtimer);
-  //   console.log(timertime,isthrouhtimer);
-  // }, [timertime, isthrouhtimer])
 
   const handleChange = (e) => {
     setTask(e.target.value);
   };
 
+
   const AddTask = () => {
-    if (task !== " ") {
-      const newid = list.length + 1;
+    const newid = list.length;
+    if (task !== " " && isthrouhtimer !== true) {
       const taskDetails = {
         id: newid,
         name: task,
         completed: false,
         timetaken: 0,
         deletedstatus: false,
-        updatedon: "",
+        updatedon: " ",
       }
       console.log(taskDetails);
       setList([...list, taskDetails]);
+      console.log(list);
     }
+    else if (task !== " " && isthrouhtimer === true) {
 
-  };
-
-  // const getValue = (v1, v2) => {
-  //   setTimertime(v1);
-  //   setIsthroughtimer(v2);
-  //   console.log(timertime, isthrouhtimer);
-  // }
-
-
-  const AddTaskfromTimer = (val1, val2) => {
-    let timertime = val1;
-    let isthroughTimer = val2;
-    const newid = list.length + 1;
-    let newupdatedon = moment().format("DD-MM-YYYY, h:mm:ss a");
-    if (task !== " " && isthroughTimer === true) {
+      let newupdatedon = moment().format("DD-MM-YYYY, h:mm:ss a");
       const taskDetails = {
         id: newid,
         name: task,
@@ -93,42 +76,50 @@ export default function BasicCard() {
 
       console.log(taskDetails);
       setList([...list, taskDetails]);
-      setTimeflag(false);
-      console.log(timeflag);
+      setIsthroughtimer(false);
+      console.log(list);
     }
 
+  };
+
+  const getValue = (v1, v2) => {
+    setTimertime(v1);
+    setIsthroughtimer(v2);
 
   }
 
-
-
   return (
     <div>
-
-      <input
+      <TextField
+        id="outlined-basic"
+        label="Enter your Task"
+        variant="outlined"
         type="text"
         name="text"
-        id="Task"
-        onChange={(e) => handleChange(e)}
-        placeholder="Add task here..."
+        value={task}
+        onChange={(e) => handleChange(e)} />
 
-      />
-      {/* {timeflag ?
-        (<Button variant="contained" onClick={timeflag ? AddTaskfromTimer(v1, v2) :
-          { AddTask }} >Add</Button>) : (<Button variant="contained" onClick={AddTask}>Add</Button>)} */}
 
-      <Button variant="contained" onClick={AddTask}>Add</Button>
+
+      <Button variant="contained"
+        id="add_button"
+        color="secondary"
+        endIcon={<SendIcon />}
+        onClick={AddTask}>
+        ADD
+      </Button>
+
+
+
+      <br />
+
+      
 
 
       <Timer gettimeValue={(val1, val2) => {
         console.log(val1, val2);
-        AddTaskfromTimer(val1, val2);
-        // setTimeflag(true);
-        // getValue(val1, val2);s
-
+        getValue(val1, val2);
       }}> </Timer>
-
-
 
       <Card sx={{ minWidth: 600 }}>
         <CardContent>
@@ -138,15 +129,17 @@ export default function BasicCard() {
           <BasicTable
             list={list}
             setList={(val) => setList(val)}
-
-
           />
         </CardContent>
         <CardActions>
 
         </CardActions>
       </Card>
-    </div>
+      <Popup />
 
+      
+
+
+    </div>
   );
 }
