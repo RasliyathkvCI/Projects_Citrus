@@ -93,14 +93,15 @@ export default function BasicTable({ list, setList }) {
 
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 700 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell >ID</TableCell>
-              <TableCell>Task Name</TableCell>
-              <TableCell align="left">Time Taken</TableCell>
-              <TableCell align="right" sortDirection={"desc"}>Completed</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell style={{ width: "10%",fontSize:"100%" ,color:"black"}}>ID</TableCell>
+              <TableCell style={{ width: "20%",fontSize:"100%" ,color:"black"}}>Task Name</TableCell>
+              <TableCell align="left" style={{ width: "22%",fontSize:"100%" ,color:"black"}}>Time Taken</TableCell>
+              <TableCell align="right" sortDirection={"desc"}style={{ width: "25%",fontSize:"100%" ,color:"black"}}>Completed</TableCell>
+              <TableCell align="right"style={{ width: "25%",fontSize:"100%" ,color:"black"}}> Actions</TableCell>
+              <TableCell style={{ width: "20%",fontSize:"100%" ,color:"black"}}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -118,6 +119,7 @@ export default function BasicTable({ list, setList }) {
                       label="Time Taken"
                       variant="outlined"
                       placeholder="00:00:00"
+                      sx={{ boxSizing: "50%" }}
                       onChange={(event) => {
                         const prevState = [...list];
                         // prevState[row.id].timetaken = validateTimer(event.target.value)
@@ -138,46 +140,18 @@ export default function BasicTable({ list, setList }) {
                     <IconButton
                       edge="end"
                       aria-label="complete"
-                      style={{ margin: "15px 10px" }}
+                      style={{ margin: "5px 5px" }}
                       onClick={() => handleComplete(row, row.id)}
                     >
                       <TaskAltIcon />
                     </IconButton>
                   )}
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    style={{ margin: "15px 10px" }}
-                    onClick={handleClickOpen }
-                    >                   
-                      {/* <Popup/> */}
-
-                    <Dialog
-                      fullScreen={fullScreen}
-                      open={open}
-                      onClose={handleClose}
-                      aria-labelledby="responsive-dialog-title"
-                    >
-                      <DialogTitle id="responsive-dialog-title">
-                      </DialogTitle>
-                      <DialogContent>
-                        <DialogContentText>
-                          Do You want to Delete....?
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button autoFocus onClick={()=>{handleClose()}}>
-                          No
-                        </Button>
-                        <Button onClick={()=>{deletetask(row.id)}} autoFocus>
-                          Yes
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                    <DeleteIcon />
-
-
-                  </IconButton>
+                  
+                </TableCell>
+                <TableCell align="left">
+                  <Popup list={list}
+                    setList={(val) => setList(val)}
+                    id={row.id}></Popup>
                 </TableCell>
               </TableRow>
             ))}
@@ -208,27 +182,9 @@ export default function BasicTable({ list, setList }) {
                 <StyledTableCell align="right">{row.completed ? "Completed" : "Pending"}</StyledTableCell>
                 <StyledTableCell align="right">{row.updatedon}</StyledTableCell>
                 <StyledTableCell align="right">
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    style={{ margin: "15px 10px" }}
-                    onClick={()=>{deletetask(row.id)}}
-                  // onClick={toggleModal}
-                  >
-                    {/* {modal && (
-                      <div className="modal">
-                        <div onClick={toggleModal} className="overlay"></div>
-                        <div className="modal-content">
-                          <h4> Do you want to delete this task..?</h4>
-                          <Button onClick={toggleModal}>No</Button>
-                          <Button onClick={() => { deletetask(row.id) }}>yes</Button>
-                        </div>
-                      </div>
-                    )} */}
-
-
-                    <DeleteIcon />
-                  </IconButton>
+                  <Popup list={list}
+                    setList={(val) => setList(val)}
+                    id={row.id}></Popup>
                 </StyledTableCell>
               </StyledTableRow>
             ))}

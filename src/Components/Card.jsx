@@ -109,13 +109,6 @@ export default function BasicCard() {
         ADD
       </Button>
 
-
-
-      <br />
-
-      
-
-
       <Timer gettimeValue={(val1, val2) => {
         console.log(val1, val2);
         getValue(val1, val2);
@@ -135,11 +128,6 @@ export default function BasicCard() {
 
         </CardActions>
       </Card>
-      <Popup />
-
-      
-
-
     </div>
   );
 }
