@@ -10,8 +10,6 @@ import Typography from "@mui/material/Typography";
 import BasicTable from "./Table";
 import Timer from "./Timer";
 import moment from "moment";
-import Popup from "./popup";
-
 
 
 
@@ -49,85 +47,124 @@ export default function BasicCard() {
 
   const AddTask = () => {
     const newid = list.length;
-    if (task !== " " && isthrouhtimer !== true) {
-      const taskDetails = {
-        id: newid,
-        name: task,
-        completed: false,
-        timetaken: 0,
-        deletedstatus: false,
-        updatedon: " ",
-      }
-      console.log(taskDetails);
-      setList([...list, taskDetails]);
-      console.log(list);
+    if (task === "") {
+      alert("Please enter your task")
+
     }
-    else if (task !== " " && isthrouhtimer === true) {
-
-      let newupdatedon = moment().format("DD-MM-YYYY, h:mm:ss a");
-      const taskDetails = {
-        id: newid,
-        name: task,
-        completed: true,
-        timetaken: timertime,
-        deletedstatus: false,
-        updatedon: newupdatedon,
+    else if (task !== " ") {
+      if (isthrouhtimer !== true) {
+        const taskDetails = {
+          id: newid,
+          name: task,
+          completed: false,
+          timetaken: 0,
+          deletedstatus: false,
+          updatedon: " ",
+        }
+        console.log(taskDetails);
+        setList([...list, taskDetails]);
+        console.log(list);      
       }
-
-      console.log(taskDetails);
-      setList([...list, taskDetails]);
-      setIsthroughtimer(false);
-      console.log(list);
-    }
-
-  };
-
-  const getValue = (v1, v2) => {
-    setTimertime(v1);
-    setIsthroughtimer(v2);
-
+      else if(isthrouhtimer === true ){
+        let newupdatedon = moment().format("DD-MM-YYYY, h:mm:ss a");
+        const taskDetails = {
+              id: newid,
+              name: task,
+              completed: true,
+              timetaken: timertime,
+              deletedstatus: false,
+              updatedon: newupdatedon,
+            }
+        
+            console.log(taskDetails);
+            setList([...list, taskDetails]);
+            setIsthroughtimer(false);
+            console.log(list);
+      }
   }
+  // if (task !== " " && isthrouhtimer !== true) {
+  //   const taskDetails = {
+  //     id: newid,
+  //     name: task,
+  //     completed: false,
+  //     timetaken: 0,
+  //     deletedstatus: false,
+  //     updatedon: " ",
+  //   }
+  //   console.log(taskDetails);
+  //   setList([...list, taskDetails]);
+  //   console.log(list);
+  // }
+  // else if (task !== " " && isthrouhtimer === true) {
 
-  return (
-    <div>
-      <TextField
-        id="outlined-basic"
-        label="Enter your Task"
-        variant="outlined"
-        type="text"
-        name="text"
-        value={task}
-        onChange={(e) => handleChange(e)} />
+  //   let newupdatedon = moment().format("DD-MM-YYYY, h:mm:ss a");
+  //   const taskDetails = {
+  //     id: newid,
+  //     name: task,
+  //     completed: true,
+  //     timetaken: timertime,
+  //     deletedstatus: false,
+  //     updatedon: newupdatedon,
+  //   }
 
+  //   console.log(taskDetails);
+  //   setList([...list, taskDetails]);
+  //   setIsthroughtimer(false);
+  //   console.log(list);
+  // }
+  // else if(task === " "){
+  //   alert("Please add a task");
+  // }
 
+};
 
-      <Button variant="contained"
-        id="add_button"
-        color="secondary"
-        endIcon={<SendIcon />}
-        onClick={AddTask}>
-        ADD
-      </Button>
+const getValue = (v1, v2) => {
+  setTimertime(v1);
+  setIsthroughtimer(v2);
 
-      <Timer gettimeValue={(val1, val2) => {
-        console.log(val1, val2);
-        getValue(val1, val2);
-      }}> </Timer>
+}
 
-      <Card sx={{ minWidth: 600 }}>
-        <CardContent>
-          <Typography sx={{ fontSize: 25 }} gutterBottom>
-            Tasks of the Day
-          </Typography>
-          <BasicTable
-            list={list}
-            setList={(val) => setList(val)}
-          />
-        </CardContent>
-        <CardActions>
+return (
+  <div>
+    <TextField
+      required={true}
+      id="outlined-basic"
+      label="Enter your Task"
+      variant="outlined"
+      type="text"
+      name="text"
 
-        </CardActions>
-      </Card>
-    </div>
-  );
+      value={task}
+      onChange={(e) => handleChange(e)}
+    />
+
+    <Button variant="contained"
+      id="add_button"
+      color="secondary"
+      endIcon={<SendIcon />}
+      onClick={AddTask}>
+      ADD
+    </Button>
+
+    <Timer gettimeValue={(val1, val2) => {
+      console.log(val1, val2);
+      getValue(val1, val2);
+    }}> </Timer>
+
+    <Card sx={{ minWidth: 600 }}>
+      <CardContent>
+        <Typography sx={{ fontSize: 25 }} gutterBottom>
+          Tasks of the Day
+        </Typography>
+        <BasicTable
+          list={list}
+          setList={(val) => setList(val)}
+        />
+      </CardContent>
+      <CardActions>
+
+      </CardActions>
+    </Card>
+  </div>
+);
 }

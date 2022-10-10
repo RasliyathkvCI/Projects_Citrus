@@ -8,35 +8,18 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { IconButton, TextField } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { styled } from '@mui/material/styles';
 import moment from "moment";
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
 import Popup from "./popup";
 
 
 
 export default function BasicTable({ list, setList }) {
 
-  const [open, setOpen] = React.useState(false);
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  
+  
+   
 
   const handleComplete = (item, index) => {
     if (item.timetaken !== 0) {
@@ -50,14 +33,7 @@ export default function BasicTable({ list, setList }) {
     }
   };
 
-  const deletetask = (index) => {
-    const prevState = [...list];
-    prevState[index].deletedstatus = true;
-    setList(prevState);
-    console.log(index);
-    setOpen(false);
-    // toggleModal();
-  };
+  
 
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
