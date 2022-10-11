@@ -1,0 +1,3 @@
+[submodule "test-admin"]
+	path = test-admin
+	url = https://github.com/RasliyathkvCI/Projects_Citrus.git
